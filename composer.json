@@ -12,7 +12,13 @@
       "homepage": "https://digit.srl"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "WOM\\": "src/"
+    }
+  },
   "require": {
-    "php": "^7.0"
+    "php": "^7.0",
+    "monolog/monolog": "^2.1"
   }
 }
