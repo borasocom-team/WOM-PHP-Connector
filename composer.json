@@ -1,5 +1,5 @@
 {
-  "name": "digitsrl/PHP-WOM-Connector",
+  "name": "digitsrl/php-wom-connector",
   "description": "A PHP implementation of WOM connector which can be used to develop Instruments and/or Merchant entities",
   "minimum-stability": "stable",
   "keywords": ["WOM","Credits","DIGIT", "Instrument", "Merchant"],
