@@ -1,0 +1,18 @@
+{
+  "name": "digitsrl/PHP-WOM-Connector",
+  "description": "A PHP implementation of WOM connector which can be used to develop Instruments and/or Merchant entities",
+  "minimum-stability": "stable",
+  "keywords": ["WOM","Credits","DIGIT", "Instrument", "Merchant"],
+  "homepage": "https://wom.social",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "DIGIT SRL",
+      "email": "info@digit.srl",
+      "homepage": "https://digit.srl"
+    }
+  ],
+  "require": {
+    "php": "^7.0"
+  }
+}
