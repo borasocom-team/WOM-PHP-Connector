@@ -2,8 +2,6 @@
 
 namespace WOM;
 
-require __DIR__ . '\..\vendor\autoload.php';
-
 use WOM\config\Config;
 use Ramsey\Uuid\Uuid;
 
