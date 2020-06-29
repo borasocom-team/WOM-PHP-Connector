@@ -12,7 +12,7 @@ class Filter implements \JsonSerializable
     public $rightBottom;
     public $maxAge;
 
-    private function __construct(string $aim, array $leftTop, array $rightBottom, int $maxAge)
+    private function __construct(string $aim, array $leftTop, array $rightBottom , int $maxAge)
     {
         $this->aim = $aim;
         $this->leftTop = $leftTop;
@@ -20,7 +20,7 @@ class Filter implements \JsonSerializable
         $this->maxAge = $maxAge;
     }
 
-    public static function Create(string $aim, array $leftTop, array $rightBottom, int $maxAge){
+    public static function Create(string $aim = "", array $leftTop = array(89.9, -179.9), array $rightBottom = array(-89.9, 179.9), int $maxAge = 99999){
         return new Filter($aim, $leftTop, $rightBottom, $maxAge);
     }
 
