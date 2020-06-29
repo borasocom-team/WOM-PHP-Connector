@@ -13,7 +13,7 @@ class POS
     private $registry;
     private $privKey;
 
-    public function __construct(string $id, string $pubKeyPath, string $privKeyPath, string $privKeyPassword='')
+    public function __construct(string $pubKeyPath, string $id, string $privKeyPath, string $privKeyPassword='')
     {
 
         \WOM\Logger::Initialize();
@@ -23,15 +23,10 @@ class POS
         $this->privKey = CryptoHelper::LoadPrivateKey($privKeyPath, $privKeyPassword);
 
         $pubKey = CryptoHelper::LoadPublicKey($pubKeyPath);
-        $this->registry = Registry::GetInstance(Config::BASE_URL, $pubKey);
+        $this->registry = Registry::GetInstance(Config::GetBaseUrl(), $pubKey);
     }
-//100,
-//        'http://google.it',
-//        $filter,
-//        'http://libero.it',
-//        False,
-//        $password,
-//        $otc
+
+
     public function RequestPayment(int $amount, string $pocketAckUrl, Filter $filter, string $posAckUrl = "", bool $persistent = False, string $nonce=null, string &$password=null, string &$otc=null){
 
         if($amount < 1){

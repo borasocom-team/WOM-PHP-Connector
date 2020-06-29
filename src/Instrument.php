@@ -14,7 +14,8 @@ class Instrument
     private $registry;
     private $privKey;
 
-    public function __construct(string $id, string $pubKeyPath, string $privKeyPath, string $privKeyPassword='')
+
+    public function __construct(string $pubKeyPath, string $id, string $privKeyPath, string $privKeyPassword='')
     {
 
         \WOM\Logger::Initialize();
@@ -24,7 +25,7 @@ class Instrument
         $this->privKey = CryptoHelper::LoadPrivateKey($privKeyPath, $privKeyPassword);
 
         $pubKey = CryptoHelper::LoadPublicKey($pubKeyPath);
-        $this->registry = Registry::GetInstance(Config::BASE_URL, $pubKey);
+        $this->registry = Registry::GetInstance(Config::GetBaseUrl(), $pubKey);
     }
 
     public function RequestVouchers(array $vouchers, string $nonce="", string &$password=null, string &$otc=null){

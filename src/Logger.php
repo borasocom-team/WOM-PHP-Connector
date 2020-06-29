@@ -19,11 +19,11 @@ class Logger
             Logger::$Instance->pushHandler(new StreamHandler('error.log', \Monolog\Logger::ERROR));
             Logger::$Instance->pushHandler(new StreamHandler('php://stdout', \Monolog\Logger::ERROR));
 
-            if(Config::DEBUG){
+            if(Config::GetShowDebug()){
                 Logger::$Instance->pushHandler(new StreamHandler('php://stdout', \Monolog\Logger::DEBUG));
             }
 
-            if(Config::WARNING){
+            if(Config::GetShowWarning()){
                 Logger::$Instance->pushHandler(new StreamHandler('php://stdout', \Monolog\Logger::WARNING));
             }
         }
