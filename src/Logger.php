@@ -17,7 +17,7 @@ class Logger
             Logger::$Instance = new \Monolog\Logger("WOM Connector");
             Logger::$Instance->pushHandler(new StreamHandler('warning.log', \Monolog\Logger::WARNING));
             Logger::$Instance->pushHandler(new StreamHandler('error.log', \Monolog\Logger::ERROR));
-            Logger::$Instance->pushHandler(new StreamHandler('php://stdout', \Monolog\Logger::ERROR));
+            Logger::$Instance->pushHandler(new StreamHandler('php://stderr', \Monolog\Logger::ERROR));
 
             if(Config::ShowDebug()){
                 Logger::$Instance->pushHandler(new StreamHandler('php://stdout', \Monolog\Logger::DEBUG));
