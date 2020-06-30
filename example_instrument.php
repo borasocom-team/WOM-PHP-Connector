@@ -2,7 +2,6 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-DEFINE("REGISTRY_PUBLIC_KEY", "keys/registry.pub");
 DEFINE("INSTRUMENT_PRIVATE_KEY", "keys/instrument1.pem");
 DEFINE("INSTRUMENT_PRIVATE_KEY_PASSWORD", "");
 DEFINE("INSTRUMENT_ID", "5e737fba9036edb02d61ef6d");
@@ -30,7 +29,7 @@ $vouchers[] = \WOM\Voucher::Create('H', random_float(40,52), random_float(10,15)
 // INSTRUMENT CREATION
 // Instantiate the Instrument with its ID, Private Key, and (optionally) the private key's password
 
-$Instrument = new \WOM\Instrument(REGISTRY_PUBLIC_KEY, INSTRUMENT_ID, INSTRUMENT_PRIVATE_KEY, INSTRUMENT_PRIVATE_KEY_PASSWORD);
+$Instrument = new \WOM\Instrument(INSTRUMENT_ID, INSTRUMENT_PRIVATE_KEY, INSTRUMENT_PRIVATE_KEY_PASSWORD);
 
 // Request Vouchers
 $otc = null;

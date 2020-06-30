@@ -2,7 +2,6 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-DEFINE("REGISTRY_PUBLIC_KEY", "keys/registry.pub");
 DEFINE("POS_PRIVATE_KEY", "keys/pos1.pem");
 DEFINE("POS_PRIVATE_KEY_PASSWORD", "");
 DEFINE("POS_ID", "5e5e473700d98a60b7db92d8");
@@ -12,9 +11,10 @@ DEFINE("DEV", True);
 date_default_timezone_set("UTC");
 
 
-$POS = new \WOM\POS(REGISTRY_PUBLIC_KEY, POS_ID,POS_PRIVATE_KEY, POS_PRIVATE_KEY_PASSWORD);
+$POS = new \WOM\POS(POS_ID,POS_PRIVATE_KEY, POS_PRIVATE_KEY_PASSWORD);
 
-$filter = \WOM\Filter::Create('H', array(46.0, -17.0), array(12.0, 160.0), 14);
+//$filter = \WOM\Filter::Create('H', array(46.0, -17.0), array(12.0, 160.0), 14);
+$filter = \WOM\Filter::Create();
 
 
 // Request Vouchers

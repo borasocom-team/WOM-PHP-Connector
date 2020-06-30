@@ -7,6 +7,8 @@ composer.phar
 vendor/
 
 *.png
+*.pub
+*.pem
 
 # User-specific stuff
 .idea/**/workspace.xml

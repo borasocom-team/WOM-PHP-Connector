@@ -13,17 +13,14 @@ class POS
     private $registry;
     private $privKey;
 
-    public function __construct(string $pubKeyPath, string $id, string $privKeyPath, string $privKeyPassword='')
+    public function __construct(string $id, string $privKeyPath, string $privKeyPassword='')
     {
-
         \WOM\Logger::Initialize();
-
 
         $this->id = $id;
         $this->privKey = CryptoHelper::LoadPrivateKey($privKeyPath, $privKeyPassword);
 
-        $pubKey = CryptoHelper::LoadPublicKey($pubKeyPath);
-        $this->registry = Registry::GetInstance(Config::GetBaseUrl(), $pubKey);
+        $this->registry = Registry::GetInstance(Config::GetBaseUrl());
     }
 
 

@@ -3,6 +3,12 @@
 
 namespace WOM;
 
+define("REGISTRY_PUBLICK_KEY_PATH", 'registry.pub');
+
+
+use Composer\Json\JsonValidationException;
+use JsonSchema\Exception\JsonDecodingException;
+use WOM\config\Config;
 
 class Registry
 {
@@ -10,17 +16,18 @@ class Registry
     public $publicKey;
     private $logger;
 
+
     private static $Instance = null;
 
-    private function __construct(string $baseUrl, $publicKey)
+    private function __construct(string $baseUrl)
     {
         $this->client = new RESTClient($baseUrl);
-        $this->publicKey = $publicKey;
+        $this->publicKey = $pubKey = CryptoHelper::LoadPublicKey($this->RefreshPublicKey());
     }
 
-    public static function GetInstance(string $baseUrl, $publicKey){
+    public static function GetInstance(string $baseUrl){
         if(Registry::$Instance == null){
-            Registry::$Instance = new Registry($baseUrl, $publicKey);
+            Registry::$Instance = new Registry($baseUrl);
         }
 
         return Registry::$Instance;
@@ -73,24 +80,44 @@ class Registry
                 \WOM\Logger::$Instance->debug('No errors');
                 break;
             case JSON_ERROR_DEPTH:
-                \WOM\Logger::$Instance->debug('Maximum stack depth exceeded');
+                \WOM\Logger::$Instance->error('Maximum stack depth exceeded');
+                throw new JsonValidationException('Maximum stack depth exceeded');
                 break;
             case JSON_ERROR_STATE_MISMATCH:
-                \WOM\Logger::$Instance->debug('Underflow or the modes mismatch');
+                \WOM\Logger::$Instance->error('Underflow or the modes mismatch');
+                throw new JsonValidationException('Underflow or the modes mismatch');
                 break;
             case JSON_ERROR_CTRL_CHAR:
-                \WOM\Logger::$Instance->debug('Unexpected control character found');
+                \WOM\Logger::$Instance->error('Unexpected control character found');
+                throw new JsonValidationException('Unexpected control character found');
                 break;
             case JSON_ERROR_SYNTAX:
-                \WOM\Logger::$Instance->debug('Syntax error, malformed JSON');
+                \WOM\Logger::$Instance->error('Syntax error, malformed JSON');
+                throw new JsonValidationException('Syntax error, malformed JSON');
                 break;
             case JSON_ERROR_UTF8:
-                \WOM\Logger::$Instance->debug('Malformed UTF-8 characters, possibly incorrectly encoded');
+                \WOM\Logger::$Instance->error('Malformed UTF-8 characters, possibly incorrectly encoded');
+                throw new JsonValidationException('Malformed UTF-8 characters, possibly incorrectly encoded');
                 break;
             default:
-                \WOM\Logger::$Instance->debug('Unknown error');
+                \WOM\Logger::$Instance->error('Unknown error');
+                throw new JsonValidationException('Unknown error');
                 break;
         }
-        exit(1);
+    }
+
+    private function RefreshPublicKey()
+    {
+        if(file_exists(REGISTRY_PUBLICK_KEY_PATH)){
+            unlink(REGISTRY_PUBLICK_KEY_PATH);
+        }
+
+        $content = file_get_contents(Config::GetRegistryPubKeyUrl());
+        if(!$content) {
+            throw new \Exception("Can't refresh Registry public key.");
+        }
+        file_put_contents(REGISTRY_PUBLICK_KEY_PATH, $content);
+
+        return REGISTRY_PUBLICK_KEY_PATH;
     }
 }
