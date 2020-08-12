@@ -3,7 +3,7 @@
 ## Setup
 Installation of the PHP WOM Connector is only a Composer command away:
 
-> $ composer require digitsrl/php-wom-connector
+> $ composer require digitsrl/php-wom-connector:dev-master
 
 This will automagically install all packages required by the Connector.
 
