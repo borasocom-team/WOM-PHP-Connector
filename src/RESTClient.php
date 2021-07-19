@@ -1,5 +1,4 @@
 <?php
-
 namespace WOM;
 
 use GuzzleHttp\Client;
@@ -8,10 +7,9 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
-use Monolog\Logger;
+//use Monolog\Logger;
 
-class RESTClient
-{
+class RESTClient {
     private $client;
 
     public function __construct($base_url)
@@ -29,7 +27,6 @@ class RESTClient
             'headers' => [ 'Content-Type' => 'application/json' ]
         ]);
     }
-
 
     public function VoucherCreate($payload){
         $path = "voucher/create";
@@ -55,55 +52,55 @@ class RESTClient
         $this->PostCommand($payload, $path);
     }
 
-
     private function PostRequest($payload, $url){
         try {
-
-            $request =  $this->client->request('POST', $url, [
+            $request = $this->client->request('POST', $url, [
                 'json' => \GuzzleHttp\json_decode($payload)
             ]);
+
+            \WOM\Logger::$Instance->debug("Response body: {$request->getBody()}");
+
             return json_decode($request->getBody(), true);
-
-        } catch (ClientException $e) {
-            \WOM\Logger::$Instance->debug("REQUEST URI: {$e->getRequest()->getUri()}");
-            \WOM\Logger::$Instance->debug("REQUEST BODY: {$e->getRequest()->getBody()}");
+        }
+        catch (ClientException $e) {
+            \WOM\Logger::$Instance->debug("Request URI: {$e->getRequest()->getUri()}");
+            \WOM\Logger::$Instance->debug("Request body: {$e->getRequest()->getBody()}");
 
             $response = $e->getResponse();
             $responseBodyAsString = $response->getBody()->getContents();
-            \WOM\Logger::$Instance->debug("RESPONSE BODY: {$responseBodyAsString}");
-            exit(1);
-
-        } catch (GuzzleException $e) {
+            \WOM\Logger::$Instance->debug("Response body: {$responseBodyAsString}");
+        }
+        catch (GuzzleException $e) {
             $response = $e->getResponse();
             $responseBodyAsString = $response->getBody()->getContents();
-            \WOM\Logger::$Instance->debug("RESPONSE BODY: {$responseBodyAsString}");
-            exit(1);
+            \WOM\Logger::$Instance->error("Response body: {$responseBodyAsString}");
         }
     }
 
     private function PostCommand($payload, $url){
         try {
-
             $request = $this->client->request('POST', $url, [
                 'json' => \GuzzleHttp\json_decode($payload)
             ]);
 
-            echo json_decode($request->getBody(), true);
-
-        } catch (ClientException $e) {
+            \WOM\Logger::$Instance->debug("Response body: {$request->getBody()}");
+        }
+        catch (ClientException $e) {
             \WOM\Logger::$Instance->debug("REQUEST URI: {$e->getRequest()->getUri()}");
             \WOM\Logger::$Instance->debug("REQUEST BODY: {$e->getRequest()->getBody()}");
 
             $response = $e->getResponse();
             $responseBodyAsString = $response->getBody()->getContents();
             \WOM\Logger::$Instance->debug("RESPONSE BODY: {$responseBodyAsString}");
-            exit(1);
 
-        } catch (GuzzleException $e) {
+            throw $e;
+        }
+        catch (GuzzleException $e) {
             $response = $e->getResponse();
             $responseBodyAsString = $response->getBody()->getContents();
             \WOM\Logger::$Instance->debug("RESPONSE BODY: {$responseBodyAsString}");
-            exit(1);
+
+            throw $e;
         }
     }
 

@@ -1,15 +1,21 @@
 {
   "name": "digitsrl/php-wom-connector",
-  "description": "A PHP implementation of WOM connector which can be used to develop Instruments and/or Merchant entities",
+  "type": "library",
+  "description": "A PHP connector library for the WOM Platform, that allows clients to develop custom Instruments (WOM sources) and Merchants (WOM consumers).",
   "minimum-stability": "stable",
-  "keywords": ["WOM","Credits","DIGIT", "Instrument", "Merchant"],
+  "keywords": [ "WOM", "Credits", "Vouchers", "DIGIT", "Instrument", "Merchant"],
   "homepage": "https://wom.social",
   "license": "MIT",
   "authors": [
     {
-      "name": "DIGIT SRL",
-      "email": "info@digit.srl",
-      "homepage": "https://digit.srl"
+      "name": "Saverio Delpriori",
+      "email": "saveriodelpriori@gmail.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Lorenz Cuno Klopfenstein",
+      "email": "lck@klopfenstein.net",
+      "role": "Developer"
     }
   ],
   "autoload": {
@@ -18,13 +24,12 @@
     }
   },
   "require": {
-    "php": "^7.0",
-    "monolog/monolog": "^2.1",
-    "guzzlehttp/guzzle": "~6.0",
+    "php": "^5.6.40",
     "ext-json": "*",
-    "ramsey/uuid": "^4.0",
     "ext-openssl": "*",
-    "phpseclib/phpseclib": "^2.0",
-    "endroid/qr-code": "^3.8"
+    "monolog/monolog": "^1.25",
+    "guzzlehttp/guzzle": "~6.0",
+    "ramsey/uuid": "^3.9.3",
+    "phpseclib/phpseclib": "^2.0.32"
   }
 }

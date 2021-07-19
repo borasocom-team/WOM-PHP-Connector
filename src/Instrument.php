@@ -1,79 +1,72 @@
 <?php
-
 namespace WOM;
 
-use WOM\config\Config;
+use WOM\Config\Domain;
 use Ramsey\Uuid\Uuid;
 
-
-
-class Instrument
-{
+class Instrument {
     private $log;
     private $id;
     private $registry;
     private $privKey;
 
-
-    public function __construct(string $id, string $privKeyPath, string $privKeyPassword='')
-    {
+    public function __construct($id, $privKeyPath, $privKeyPassword = null) {
+        if(!$privKeyPassword) {
+            $privKeyPassword = '';
+        }
 
         \WOM\Logger::Initialize();
-
 
         $this->id = $id;
         $this->privKey = CryptoHelper::LoadPrivateKey($privKeyPath, $privKeyPassword);
 
-        $this->registry = Registry::GetInstance(Config::GetBaseUrl());
+        $this->registry = Registry::GetInstance(Domain::GetBaseUrl());
     }
 
-    public function RequestVouchers(array $vouchers, string $nonce="", string &$password=null, string &$otc=null){
-
-        if(!is_array($vouchers) or !count($vouchers) > 0 or !is_a($vouchers[0], '\WOM\Voucher')){
-            \WOM\Logger::$Instance->debug("Voucher list not valid or empty");
+    public function RequestVouchers($vouchers, $nonce = null, $password = null) {
+        if(!is_array($vouchers) or count($vouchers) == 0 or !is_a($vouchers[0], '\WOM\Voucher')){
             throw new \InvalidArgumentException("Voucher list not valid or empty");
         }
 
-        // call to voucher/create API
+        \WOM\Logger::$Instance->debug("Performing voucher generation request");
+
         $response_data = $this->VoucherCreate($vouchers, $nonce, $password);
 
-        // call to voucher/verify API
         $this->VoucherVerify($response_data['otc']);
         
-        \WOM\Logger::$Instance->debug("Voucher generated!");
+        \WOM\Logger::$Instance->info("Vouchers generated");
 
         $otc = $response_data['otc'];
         $password = $response_data['password'];
+        return array($otc, $password);
     }
 
-    private function VoucherCreate(array $vouchers, string $nonce="", string $password=null)
-    {
-        // Generate a valid nonce if there is no one
-        $effectiveNonce = Uuid::uuid4()->toString();
+    private function VoucherCreate($vouchers, $nonce = null, $password = null) {
+        if(!$nonce) {
+            // Generate a unique nonce if there is none
+            $nonce = Uuid::uuid4()->toString();
+        }
 
         $payload = json_encode(array(
-                        'SourceId' => $this->id,
-                        'Nonce' => $effectiveNonce,
-                        'Password' => $password,
-                        'Vouchers' => $vouchers
+            'sourceId' => $this->id,
+            'nonce' => $nonce,
+            'password' => $password,
+            'vouchers' => $vouchers
         ));
 
-        // encrypt inner payload
         $encryptedPayload = CryptoHelper::Encrypt($payload, $this->registry->publicKey);
 
-        // make registry request
-        $jsonResponse = $this->registry->VoucherCreate($this->id, $effectiveNonce, base64_encode($encryptedPayload));
+        $jsonResponse = $this->registry->VoucherCreate($this->id, $nonce, base64_encode($encryptedPayload));
 
-        // decode registry response
         $response = CryptoHelper::Decrypt($jsonResponse['payload'], $this->privKey);
 
         return json_decode($response, true);
-
     }
 
-    private function VoucherVerify(string $otc)
-    {
-        $encryptedOtc = CryptoHelper::Encrypt(json_encode(array('Otc' =>$otc)), $this->registry->publicKey);
+    private function VoucherVerify($otc) {
+        $encryptedOtc = CryptoHelper::Encrypt(json_encode(array(
+            'otc' =>$otc
+        )), $this->registry->publicKey);
 
         $this->registry->VoucherVerify(base64_encode($encryptedOtc));
     }

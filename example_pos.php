@@ -1,44 +1,34 @@
 <?php
-
 require __DIR__ . '/vendor/autoload.php';
 
 DEFINE("POS_PRIVATE_KEY", "keys/pos1.pem");
 DEFINE("POS_PRIVATE_KEY_PASSWORD", "");
 DEFINE("POS_ID", "5e5e473700d98a60b7db92d8");
 
-DEFINE("DEV", True);
+// Set development domain
+\WOM\Config\Domain::SetDomain('wom.social');
 
 date_default_timezone_set("UTC");
 
-
 $POS = new \WOM\POS(POS_ID,POS_PRIVATE_KEY, POS_PRIVATE_KEY_PASSWORD);
 
-//$filter = \WOM\Filter::Create('H', array(46.0, -17.0), array(12.0, 160.0), 14);
-$filter = \WOM\Filter::Create();
+// Accept health WOM vouchers from Central Europe, not older than 14 days
+$filter = \WOM\Filter::Create('H', array(52, -4), array(27, 35), 14);
 
+// Accept all WOM vouchers, with an empty filter
+//$filter = \WOM\Filter::Create();
 
-// Request Vouchers
-$otc = null;
-$password = null;
+try {
+    echo "Performing payment request" . PHP_EOL;
 
+    $values = $POS->RequestPayment(
+        1,
+        'https://example.org',
+        $filter
+    );
 
-try{
-    $POS->RequestPayment(100,
-        'http://google.it',
-        $filter,
-        'http://libero.it',
-        False,
-        null,
-        $password,
-        $otc);
-
-    echo "Otc: {$otc} Password:{$password}";
-
-    $QRCode = \WOM\WOMQRCodeGenerator::GetQRCode($otc, 300, "payment_request.png");
-    echo $QRCode;
-
-}catch(Exception $exception) {
-
-    echo "No payment generated :(";
+    echo "Otc: {$values[0]} Password: {$values[1]}" . PHP_EOL;
 }
-
+catch(Exception $exception) {
+    echo "No payment generated :(" . PHP_EOL;
+}

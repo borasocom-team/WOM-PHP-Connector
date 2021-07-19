@@ -1,91 +1,90 @@
 <?php
-
 namespace WOM;
 
-use WOM\config\Config;
+use WOM\Config\Domain;
 use Ramsey\Uuid\Uuid;
 
-
-class POS
-{
+class POS {
     private $log;
     private $id;
     private $registry;
     private $privKey;
 
-    public function __construct(string $id, string $privKeyPath, string $privKeyPassword='')
-    {
+    public function __construct($id, $privKeyPath, $privKeyPassword = null) {
+        if(!$privKeyPassword) {
+            $privKeyPassword = '';
+        }
+
         \WOM\Logger::Initialize();
 
         $this->id = $id;
         $this->privKey = CryptoHelper::LoadPrivateKey($privKeyPath, $privKeyPassword);
 
-        $this->registry = Registry::GetInstance(Config::GetBaseUrl());
+        $this->registry = Registry::GetInstance(Domain::GetBaseUrl());
     }
 
-
-    public function RequestPayment(int $amount, string $pocketAckUrl, Filter $filter, string $posAckUrl = "", bool $persistent = False, string $nonce=null, string &$password=null, string &$otc=null){
-
-        if($amount < 1){
-            \WOM\Logger::$Instance->debug("Amount not valid. It must be greater than 0.");
-            throw new \InvalidArgumentException("Amount not valid. It must be greater than 0.");
+    public function RequestPayment($amount, $pocketAckUrl, Filter $filter, $posAckUrl = null, $persistent = false, $nonce = null) {
+        if(!is_integer($amount) || $amount < 1){
+            \WOM\Logger::$Instance->error("Payment amount not valid (must be integer greater than 0)");
+            throw new \InvalidArgumentException("Payment amount not valid (must be integer greater than 0)");
+        }
+        if($pocketAckUrl == null || !filter_var($pocketAckUrl, FILTER_VALIDATE_URL)) {
+            \WOM\Logger::$Instance->error("Pocket confirmation URL must be a valid URL");
+            throw new \InvalidArgumentException("Pocket confirmation URL must be a valid URL");
+        }
+        if($filter == null || !is_a($filter, '\WOM\Filter')){
+            \WOM\Logger::$Instance->error("Filter must be set and valid");
+            throw new \InvalidArgumentException("Filter must be set and valid");
+        }
+        if($posAckUrl != null && !filter_var($posAckUrl, FILTER_VALIDATE_URL)) {
+            \WOM\Logger::$Instance->error("Ack confirmation URL must be a valid URL, if set");
+            throw new \InvalidArgumentException("Ack confirmation URL must be a valid URL, if set");
         }
 
-        if($filter == null or !is_a($filter, '\WOM\Filter')){
-            \WOM\Logger::$Instance->debug("Filter not valid");
-            throw new \InvalidArgumentException("Filter not valid");
-        }
+        \WOM\Logger::$Instance->debug("Performing payment generation request");
 
-        if($pocketAckUrl == null or empty($pocketAckUrl)){
-            \WOM\Logger::$Instance->debug("PocketAckUrl not valid");
-            throw new \InvalidArgumentException("PocketAckUrl not valid");
-        }
-
-
-        // call to voucher/create API
-        $response_data = $this->PaymentRegister($amount, $pocketAckUrl, $filter, $posAckUrl, $persistent, $nonce, $password);
+        $response_data = $this->PaymentRegister($amount, $pocketAckUrl, $filter, $posAckUrl, $persistent, $nonce);
 
         // call to voucher/verify API
         $this->PaymentVerify($response_data['otc']);
 
-        \WOM\Logger::$Instance->debug("Payment generated!");
+        \WOM\Logger::$Instance->info("Payment generated");
 
         $otc = $response_data['otc'];
         $password = $response_data['password'];
+        return array($otc, $password);
     }
 
-    private function PaymentRegister(int $amount, string $pocketAckUrl, Filter $filter, string $posAckUrl = "", bool $persistent = False, string $nonce=null, string $password=null)
-    {
-        // Generate a valid nonce if there is no one
-        $effectiveNonce = Uuid::uuid4()->toString();
+    private function PaymentRegister($amount, $pocketAckUrl, Filter $filter, $posAckUrl = null, $persistent = false, $nonce = null, $password = null) {
+        if(!$nonce) {
+            // Generate a unique nonce if there is none
+            $nonce = Uuid::uuid4()->toString();
+        }
 
         $payload = json_encode(array(
-            'PosId' => $this->id,
-            'Nonce' => $effectiveNonce,
-            'Password' => $password,
-            'Amount' => $amount,
-            'SimpleFilter' => $filter,
-            'PocketAckUrl' => $pocketAckUrl,
-            'PosAckUrl' => $posAckUrl,
-            'Persistent' => $persistent
+            'posId' => $this->id,
+            'nonce' => $nonce,
+            'password' => $password,
+            'amount' => $amount,
+            'simpleFilter' => $filter,
+            'pocketAckUrl' => $pocketAckUrl,
+            'posAckUrl' => $posAckUrl,
+            'persistent' => $persistent
         ));
 
-        // encrypt inner payload
         $encryptedPayload = CryptoHelper::Encrypt($payload, $this->registry->publicKey);
 
-        // make registry request
-        $jsonResponse = $this->registry->PaymentRegister($this->id, $effectiveNonce, base64_encode($encryptedPayload));
+        $jsonResponse = $this->registry->PaymentRegister($this->id, $nonce, base64_encode($encryptedPayload));
 
-        // decode registry response
         $response = CryptoHelper::Decrypt($jsonResponse['payload'], $this->privKey);
 
         return json_decode($response, true);
-
     }
 
-    private function PaymentVerify(string $otc)
-    {
-        $encryptedOtc = CryptoHelper::Encrypt(json_encode(array('Otc' =>$otc)), $this->registry->publicKey);
+    private function PaymentVerify($otc) {
+        $encryptedOtc = CryptoHelper::Encrypt(json_encode(array(
+            'Otc' =>$otc
+        )), $this->registry->publicKey);
 
         $this->registry->PaymentVerify(base64_encode($encryptedOtc));
     }

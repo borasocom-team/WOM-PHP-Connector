@@ -1,45 +1,44 @@
 <?php
-
-
 namespace WOM;
 
-
-class Filter implements \JsonSerializable
-{
-
+class Filter implements \JsonSerializable {
     public $aim;
     public $leftTop;
     public $rightBottom;
     public $maxAge;
 
-    private function __construct(string $aim = null, array $leftTop = null, array $rightBottom = null, int $maxAge = 0)
-    {
+    private function __construct($aim = null, $leftTop = null, $rightBottom = null, $maxAge = null) {
         $this->aim = $aim;
         $this->leftTop = $leftTop;
         $this->rightBottom = $rightBottom;
-        $this->maxAge = $maxAge;
+        $this->maxAge = ($maxAge == null) ? 0 : $maxAge;
     }
 
-    public static function Create(string $aim = null, array $leftTop = null, array $rightBottom = null, int $maxAge = 0){
+    public static function Create($aim = null, $leftTop = null, $rightBottom = null, $maxAge = null) {
         return new Filter($aim, $leftTop, $rightBottom, $maxAge);
     }
 
-    public function jsonSerialize()
-    {
-        $obj = array("dum" => "my"); //HACK: needed to generate an associative array when all parameters are null
+    public function jsonSerialize() {
+        // HACK: needed to generate an associative array when all parameters are null
+        $obj = array("dum" => "my");
 
-        if ($this->aim != null and !empty($this->aim))
-            $obj['Aim'] = $this->aim;
+        if ($this->aim != null && !empty($this->aim)) {
+            $obj['aim'] = $this->aim;
+        }
 
-        if ($this->maxAge > 0)
-            $obj['MaxAge'] = $this->maxAge;
+        if ($this->maxAge > 0) {
+            $obj['maxAge'] = $this->maxAge;
+        }
 
-        if ($this->leftTop != null and is_array($this->leftTop) and count($this->leftTop) == 2
-            and $this->rightBottom != null and is_array($this->rightBottom) and count($this->rightBottom) == 2)
-            $obj['Bounds'] = array (
-                'LeftTop' => $this->leftTop,
-                'RightBottom' => $this->rightBottom);
+        if ($this->leftTop != null && is_array($this->leftTop) && count($this->leftTop) == 2 &&
+            $this->rightBottom != null && is_array($this->rightBottom) && count($this->rightBottom) == 2) {
+            $obj['bounds'] = array (
+                'leftTop' => $this->leftTop,
+                'rightBottom' => $this->rightBottom
+            );
+        }
 
         return $obj;
     }
+
 }
