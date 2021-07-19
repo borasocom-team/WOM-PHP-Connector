@@ -28,14 +28,14 @@ $vouchers[] = \WOM\Voucher::Create('H', random_float(40, 52), random_float(10, 1
 // INSTRUMENT CREATION
 // Instantiate the Instrument with its ID, Private Key, and (optionally) the private key's password
 
-$Instrument = new \WOM\Instrument(INSTRUMENT_ID, INSTRUMENT_PRIVATE_KEY, INSTRUMENT_PRIVATE_KEY_PASSWORD);
+$instrument = new \WOM\Instrument(INSTRUMENT_ID, INSTRUMENT_PRIVATE_KEY, INSTRUMENT_PRIVATE_KEY_PASSWORD);
 
 echo "Instrument created" . PHP_EOL;
 
 // Request Vouchers
 try{
     echo "Performing voucher request with " . count($vouchers) . " specifications" . PHP_EOL;
-    $values = $Instrument->RequestVouchers($vouchers);
+    $values = $instrument->RequestVouchers($vouchers);
     echo "Otc: {$values[0]} Password: {$values[1]}" . PHP_EOL;
 }
 catch(Exception $exception) {
