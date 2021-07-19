@@ -7,6 +7,7 @@ DEFINE("POS_ID", "5e5e473700d98a60b7db92d8");
 
 // Set development domain
 \WOM\Config\Domain::SetDomain('wom.social');
+\WOM\Logger::Initialize(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Logger::DEBUG));
 
 date_default_timezone_set("UTC");
 
