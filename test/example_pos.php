@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
-DEFINE("POS_PRIVATE_KEY", "keys/pos1.pem");
+DEFINE("POS_PRIVATE_KEY", "/keys/pos1.pem");
 DEFINE("POS_PRIVATE_KEY_PASSWORD", "");
 DEFINE("POS_ID", "5e5e473700d98a60b7db92d8");
 

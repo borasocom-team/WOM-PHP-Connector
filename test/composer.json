@@ -1,0 +1,23 @@
+{
+  "name": "digitsrl/php-wom-connector-test",
+  "type": "project",
+  "description": "",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Saverio Delpriori",
+      "email": "saveriodelpriori@gmail.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Lorenz Cuno Klopfenstein",
+      "email": "lck@klopfenstein.net",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^5.6.40",
+    "digitsrl/php-wom-connector": "^1.0"
+  }
+}
