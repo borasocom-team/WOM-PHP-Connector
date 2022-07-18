@@ -20,7 +20,7 @@ $filter = \WOM\Filter::Create('H', array(52, -4), array(27, 35), 14);
 //$filter = \WOM\Filter::Create();
 
 try {
-    echo "Performing payment request" . PHP_EOL;
+    echo "Creating payment request" . PHP_EOL;
 
     $values = $POS->RequestPayment(
         1,
@@ -28,7 +28,11 @@ try {
         $filter
     );
 
-    echo "Otc: {$values[0]} Password: {$values[1]}" . PHP_EOL;
+    echo "Payment request created (OTC: {$values[0]} Pwd: {$values[1]})" . PHP_EOL;
+
+    $status = $POS->GetPaymentStatus($values[0]);
+
+    echo "Payment has been performed: " . ($status['hasBeenPerformed'] ? 'yes' : 'no') . PHP_EOL;
 }
 catch(Exception $exception) {
     echo "No payment generated :(" . PHP_EOL;
