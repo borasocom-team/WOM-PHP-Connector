@@ -78,7 +78,7 @@ class Registry {
             $this->LogJSONError();
         }
 
-        $this->client->GetPaymentStatus($request_payload);
+        return $this->client->GetPaymentStatus($request_payload);
     }
 
     private function LogJSONError() {
