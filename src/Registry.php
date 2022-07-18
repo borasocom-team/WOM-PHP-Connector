@@ -61,6 +61,18 @@ class Registry {
         $this->client->PaymentVerify($request_payload);
     }
 
+    public function CheckPayment($pos_id, $payload) {
+        $request_payload = json_encode(array(
+            'Otc' => $otc,
+            'Payload' => $payload
+        ));
+        if($request_payload == false){
+            $this->LogJSONError();
+        }
+
+        $this->client->CheckPayment($request_payload);
+    }
+
     private function LogJSONError() {
         switch (json_last_error()) {
             case JSON_ERROR_NONE:

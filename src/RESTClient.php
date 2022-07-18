@@ -52,6 +52,12 @@ class RESTClient {
         $this->PostCommand($payload, $path);
     }
 
+    public function CheckPayment($payload) {
+        $path = "payment/check";
+
+        return $this->PostCommand($payload, $path);
+    }
+
     private function PostRequest($payload, $url){
         try {
             $request = $this->client->request('POST', $url, [
