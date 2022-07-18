@@ -52,8 +52,8 @@ class RESTClient {
         $this->PostCommand($payload, $path);
     }
 
-    public function CheckPayment($payload) {
-        $path = "payment/check";
+    public function GetPaymentStatus($payload) {
+        $path = "payment/status";
 
         return $this->PostCommand($payload, $path);
     }

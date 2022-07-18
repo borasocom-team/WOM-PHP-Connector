@@ -83,13 +83,13 @@ class POS {
 
     private function PaymentVerify($otc) {
         $encryptedOtc = CryptoHelper::Encrypt(json_encode(array(
-            'Otc' =>$otc
+            'otc' =>$otc
         )), $this->registry->publicKey);
 
         $this->registry->PaymentVerify(base64_encode($encryptedOtc));
     }
 
-    public function CheckPayment($otc) {
+    public function GetPaymentStatus($otc) {
         \WOM\Logger::$Instance->debug("Checking payment $otc status");
 
         $payload = json_encode(array(

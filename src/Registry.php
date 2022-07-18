@@ -26,7 +26,11 @@ class Registry {
     }
 
     public function VoucherCreate($source_id, $nonce, $payload) {
-        $request_payload = json_encode(array('sourceId' => $source_id, 'nonce' => $nonce, 'payload' => $payload));
+        $request_payload = json_encode(array(
+            'sourceId' => $source_id,
+            'nonce' => $nonce,
+            'payload' => $payload
+        ));
         if($request_payload == false){
             $this->LogJSONError();
         }
@@ -43,13 +47,17 @@ class Registry {
         $this->client->VoucherVerify($request_payload);
     }
 
-    public function PaymentRegister($pos_id, $nonce, $payload) {
-        $request_payload = json_encode(array('PosId' => $pos_id, 'Nonce' => $nonce, 'Payload' => $payload));
+    public function GetPaymentStatus($pos_id, $nonce, $payload) {
+        $request_payload = json_encode(array(
+            'posId' => $pos_id,
+            'nonce' => $nonce,
+            'payload' => $payload
+        ));
         if($request_payload == false){
             $this->LogJSONError();
         }
 
-        return $this->client->PaymentRegister($request_payload);
+        return $this->client->GetPaymentStatus($request_payload);
     }
 
     public function PaymentVerify($payload) {
@@ -63,8 +71,8 @@ class Registry {
 
     public function CheckPayment($pos_id, $payload) {
         $request_payload = json_encode(array(
-            'Otc' => $otc,
-            'Payload' => $payload
+            'posId' => $pos_id,
+            'payload' => $payload
         ));
         if($request_payload == false){
             $this->LogJSONError();
