@@ -99,7 +99,7 @@ class POS {
 
         $encryptedPayload = CryptoHelper::Encrypt($payload, $this->registry->publicKey);
 
-        $jsonResponse = $this->registry->CheckPayment($this->id, base64_encode($encryptedPayload));
+        $jsonResponse = $this->registry->GetPaymentStatus($this->id, base64_encode($encryptedPayload));
 
         $response = CryptoHelper::Decrypt($jsonResponse['payload'], $this->privKey);
 

@@ -47,7 +47,7 @@ class Registry {
         $this->client->VoucherVerify($request_payload);
     }
 
-    public function GetPaymentStatus($pos_id, $nonce, $payload) {
+    public function PaymentRegister($pos_id, $nonce, $payload) {
         $request_payload = json_encode(array(
             'posId' => $pos_id,
             'nonce' => $nonce,
@@ -57,7 +57,7 @@ class Registry {
             $this->LogJSONError();
         }
 
-        return $this->client->GetPaymentStatus($request_payload);
+        return $this->client->PaymentRegister($request_payload);
     }
 
     public function PaymentVerify($payload) {
@@ -69,7 +69,7 @@ class Registry {
         $this->client->PaymentVerify($request_payload);
     }
 
-    public function CheckPayment($pos_id, $payload) {
+    public function GetPaymentStatus($pos_id, $payload) {
         $request_payload = json_encode(array(
             'posId' => $pos_id,
             'payload' => $payload
@@ -78,7 +78,7 @@ class Registry {
             $this->LogJSONError();
         }
 
-        $this->client->CheckPayment($request_payload);
+        $this->client->GetPaymentStatus($request_payload);
     }
 
     private function LogJSONError() {
