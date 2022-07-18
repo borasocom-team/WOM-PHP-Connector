@@ -3,7 +3,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 DEFINE("POS_PRIVATE_KEY", "/keys/pos1.pem");
 DEFINE("POS_PRIVATE_KEY_PASSWORD", "");
-DEFINE("POS_ID", "5e5e473700d98a60b7db92d8");
+DEFINE("POS_ID", "5e74205c5f21bb265a2d26d8");
 
 // Set development domain
 \WOM\Config\Domain::SetDomain('dev.wom.social');
@@ -11,7 +11,7 @@ DEFINE("POS_ID", "5e5e473700d98a60b7db92d8");
 
 date_default_timezone_set("UTC");
 
-$POS = new \WOM\POS(POS_ID,POS_PRIVATE_KEY, POS_PRIVATE_KEY_PASSWORD);
+$POS = new \WOM\POS(POS_ID, POS_PRIVATE_KEY, POS_PRIVATE_KEY_PASSWORD);
 
 // Accept health WOM vouchers from Central Europe, not older than 14 days
 $filter = \WOM\Filter::Create('H', array(52, -4), array(27, 35), 14);

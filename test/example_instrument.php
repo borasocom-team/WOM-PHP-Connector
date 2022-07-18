@@ -3,7 +3,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 DEFINE("INSTRUMENT_PRIVATE_KEY", "/keys/instrument1.pem");
 DEFINE("INSTRUMENT_PRIVATE_KEY_PASSWORD", "");
-DEFINE("INSTRUMENT_ID", "5e737fba9036edb02d61ef6d");
+DEFINE("INSTRUMENT_ID", "5e74203f5f21bb265a2d26bd");
 
 // Set development domain
 \WOM\Config\Domain::SetDomain('dev.wom.social');
