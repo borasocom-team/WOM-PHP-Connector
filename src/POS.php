@@ -52,7 +52,10 @@ class POS {
 
         $otc = $response_data['otc'];
         $password = $response_data['password'];
-        return array($otc, $password);
+        return array(
+            'otc' => $otc,
+            'password' => $password
+        );
     }
 
     private function PaymentRegister($amount, $pocketAckUrl, Filter $filter, $posAckUrl = null, $persistent = false, $nonce = null, $password = null) {

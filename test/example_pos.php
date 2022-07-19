@@ -30,9 +30,9 @@ try {
         null // Optional boolean indicating whether this is a persistent payment (can be performed multiple times) or not
     );
 
-    echo "Payment request created (OTC: {$values[0]} Pwd: {$values[1]})" . PHP_EOL;
+    echo "Payment request created (OTC: {$values['otc']} Pwd: {$values['password']})" . PHP_EOL;
 
-    $status = $POS->GetPaymentStatus($values[0]);
+    $status = $POS->GetPaymentStatus($values['otc']);
 
     echo "Payment has been performed: " . ($status['hasBeenPerformed'] ? 'yes' : 'no') . PHP_EOL;
 }
