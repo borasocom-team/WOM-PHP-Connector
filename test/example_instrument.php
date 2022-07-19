@@ -36,7 +36,7 @@ echo "Instrument created" . PHP_EOL;
 try{
     echo "Performing voucher request with " . count($vouchers) . " specifications" . PHP_EOL;
     $values = $instrument->RequestVouchers($vouchers);
-    echo "Otc: {$values[0]} Password: {$values[1]}" . PHP_EOL;
+    echo "Otc: {$values['otc']} Password: {$values['password']}" . PHP_EOL;
 }
 catch(Exception $exception) {
     echo "No vouchers generated :(" . PHP_EOL;

@@ -38,7 +38,10 @@ class Instrument {
 
         $otc = $response_data['otc'];
         $password = $response_data['password'];
-        return array($otc, $password);
+        return array(
+            'otc' => $otc,
+            'password' => $password
+        );
     }
 
     private function VoucherCreate($vouchers, $nonce = null, $password = null) {
