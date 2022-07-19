@@ -23,9 +23,11 @@ try {
     echo "Creating payment request" . PHP_EOL;
 
     $values = $POS->RequestPayment(
-        1,
-        'https://example.org',
-        $filter
+        1, // Number of WOM vouchers required to perform payment
+        'https://example.org', // Pocket confirmation URL, will be opened by Pocket on payment completion, can be null if Pocket should only display payment confirmation on screen
+        $filter, // Filter that determines which vouchers are accepted
+        null, // Optional Registry confirmation URL, which receives a webhook request from the Registry on payment completion
+        null // Optional boolean indicating whether this is a persistent payment (can be performed multiple times) or not
     );
 
     echo "Payment request created (OTC: {$values[0]} Pwd: {$values[1]})" . PHP_EOL;

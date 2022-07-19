@@ -28,9 +28,9 @@ class POS {
             \WOM\Logger::$Instance->error("Payment amount not valid (must be integer greater than 0)");
             throw new \InvalidArgumentException("Payment amount not valid (must be integer greater than 0)");
         }
-        if($pocketAckUrl == null || !filter_var($pocketAckUrl, FILTER_VALIDATE_URL)) {
-            \WOM\Logger::$Instance->error("Pocket confirmation URL must be a valid URL");
-            throw new \InvalidArgumentException("Pocket confirmation URL must be a valid URL");
+        if($pocketAckUrl != null && !filter_var($pocketAckUrl, FILTER_VALIDATE_URL)) {
+            \WOM\Logger::$Instance->error("Pocket confirmation URL must be a valid URL, if set");
+            throw new \InvalidArgumentException("Pocket confirmation URL must be a valid URL, if set");
         }
         if($filter == null || !is_a($filter, '\WOM\Filter')){
             \WOM\Logger::$Instance->error("Filter must be set and valid");
@@ -38,7 +38,7 @@ class POS {
         }
         if($posAckUrl != null && !filter_var($posAckUrl, FILTER_VALIDATE_URL)) {
             \WOM\Logger::$Instance->error("Ack confirmation URL must be a valid URL, if set");
-            throw new \InvalidArgumentException("Ack confirmation URL must be a valid URL, if set");
+            throw new \InvalidArgumentException("Ack confirmation URL must a valid URL, if set");
         }
 
         \WOM\Logger::$Instance->debug("Performing payment generation request");
