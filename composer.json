@@ -6,6 +6,7 @@
   "keywords": [ "WOM", "Credits", "Vouchers", "DIGIT", "Instrument", "Merchant"],
   "homepage": "https://wom.social",
   "license": "MIT",
+  "version" : "1.0.0",
   "authors": [
     {
       "name": "Saverio Delpriori",
