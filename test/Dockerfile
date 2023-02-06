@@ -1,4 +1,4 @@
-FROM php:7.4-alpine
+FROM php:7.0-alpine
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
