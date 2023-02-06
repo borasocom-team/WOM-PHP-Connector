@@ -6,7 +6,7 @@
   "keywords": [ "WOM", "Credits", "Vouchers", "DIGIT", "Instrument", "Merchant"],
   "homepage": "https://wom.social",
   "license": "MIT",
-  "version" : "2.0.0.1",
+  "version" : "2.0.0.2",
   "authors": [
     {
       "name": "Saverio Delpriori",
@@ -29,8 +29,8 @@
     "ext-json": "*",
     "ext-openssl": "*",
     "monolog/monolog": "^1.16",
-    "guzzlehttp/guzzle": "~6.0",
-    "ramsey/uuid": "^3.9.3",
-    "phpseclib/phpseclib": "^2.0.32"
+    "guzzlehttp/guzzle": "^6.5",
+    "ramsey/uuid": "^3.9",
+    "phpseclib/phpseclib": "^3.0"
   }
 }
