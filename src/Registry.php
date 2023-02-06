@@ -14,7 +14,7 @@ class Registry {
 
     private function __construct($baseUrl) {
         $this->client = new RESTClient($baseUrl);
-        $this->publicKey = $pubKey = CryptoHelper::LoadPublicKeyFromString($this->RefreshPublicKey());
+        $this->publicKey = CryptoHelper::LoadPublicKeyFromString($this->RefreshPublicKey());
     }
 
     public static function GetInstance($baseUrl){
@@ -118,6 +118,7 @@ class Registry {
         if(!$pubKey) {
             throw new \Exception("Can't refresh Registry public key");
         }
+        \WOM\Logger::$Instance->info('Public key of Registry refreshed successfully');
 
         return $pubKey;
     }

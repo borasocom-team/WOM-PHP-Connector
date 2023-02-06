@@ -7,7 +7,7 @@ DEFINE("INSTRUMENT_ID", "5e74203f5f21bb265a2d26bd");
 
 // Set development domain
 \WOM\Config\Domain::SetDomain('dev.wom.social');
-\WOM\Logger::Initialize(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Logger::ERROR));
+\WOM\Logger::Initialize(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Logger::DEBUG));
 
 date_default_timezone_set("UTC");
 
@@ -16,11 +16,12 @@ function random_float($min, $max) {
 }
 
 // VOUCHER GENERATION
-// Generate 10 random Vouchers
 $vouchers = array();
-for($i=0; $i < 10; $i++) {
+
+// Generate 10 random Vouchers
+/*for($i=0; $i < 10; $i++) {
     $vouchers[] = \WOM\Voucher::Create('H', random_float(40, 52), random_float(10, 15), new DateTime('NOW'));
-}
+}*/
 
 // or, if they have identical aim, coordinates, and timestamp, you can generate them using the $count optional parameter
 $vouchers[] = \WOM\Voucher::Create('H', random_float(40, 52), random_float(10, 15), new DateTime('NOW'), 10);
@@ -39,5 +40,6 @@ try{
     echo "Otc: {$values['otc']} Password: {$values['password']}" . PHP_EOL;
 }
 catch(Exception $exception) {
-    echo "No vouchers generated :(" . PHP_EOL;
+    var_dump($exception->getTraceAsString());
+    echo "Failed to request vouchers :(" . PHP_EOL;
 }

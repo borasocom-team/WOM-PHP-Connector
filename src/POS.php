@@ -42,10 +42,9 @@ class POS {
         }
 
         \WOM\Logger::$Instance->debug("Performing payment generation request");
-
         $response_data = $this->PaymentRegister($amount, $pocketAckUrl, $filter, $posAckUrl, $persistent, $nonce);
 
-        // call to voucher/verify API
+        \WOM\Logger::$Instance->debug("Performing payment verification");
         $this->PaymentVerify($response_data['otc']);
 
         \WOM\Logger::$Instance->info("Payment generated");
