@@ -2,7 +2,7 @@
   "name": "digitsrl/php-wom-connector-test",
   "type": "project",
   "description": "",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "license": "MIT",
   "authors": [
     {
@@ -16,8 +16,14 @@
       "role": "Developer"
     }
   ],
+  "repositories": [
+    {
+      "type": "path",
+      "url": "/pckg"
+    }
+  ],
   "require": {
-    "php": "^5.6.40",
-    "digitsrl/php-wom-connector": "^1.0"
+    "php": ">=7.4",
+    "digitsrl/php-wom-connector": "*"
   }
 }
