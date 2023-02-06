@@ -25,7 +25,7 @@
     }
   },
   "require": {
-    "php": ">=5.6.40",
+    "php": ">=7.0",
     "ext-json": "*",
     "ext-openssl": "*",
     "monolog/monolog": "^1.16",

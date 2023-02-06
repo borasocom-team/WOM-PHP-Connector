@@ -37,5 +37,6 @@ try {
     echo "Payment has been performed: " . ($status['hasBeenPerformed'] ? 'yes' : 'no') . PHP_EOL;
 }
 catch(Exception $exception) {
-    echo "No payment generated :(" . PHP_EOL;
+    var_dump($exception->getTraceAsString());
+    echo "Failed to request payment :(" . PHP_EOL;
 }
